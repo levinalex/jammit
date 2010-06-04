@@ -51,6 +51,7 @@ module Jammit
                 :package_path, :mhtml_enabled, :include_jst_script, :config_path,
                 :javascript_compressor, :compressor_options, :css_compressor_options,
                 :template_extension, :template_extension_matcher
+    attr_accessor :use_packager
   end
 
   # The minimal required configuration.
@@ -93,7 +94,7 @@ module Jammit
   # Keep a global (thread-local) reference to a @Jammit::Packager@, to avoid
   # recomputing asset lists unnecessarily.
   def self.packager
-    Thread.current[:jammit_packager] ||= Packager.new
+    Thread.current[:jammit_packager] ||= (use_packager.to_s.classify.constantize || Packager).new
   end
 
   # Generate the base filename for a version of a given package.
